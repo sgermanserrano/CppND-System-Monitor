@@ -76,9 +76,7 @@ vector<int> LinuxParser::Pids() {
 float LinuxParser::MemoryUtilization() { 
 
   float mem_total;
-  float mem_free;
   float mem_available;
-  float buffers;
   string line;
   string aux;
   string mem_value_str;
@@ -100,19 +98,9 @@ float LinuxParser::MemoryUtilization() {
         mem_total = stof(mem_value_str);
         break;
 
-      case 1:
-        linestream >> aux >> mem_value_str;
-        mem_free = stof(mem_value_str);
-        break;
-
       case 2:
         linestream >> aux >> mem_value_str;
         mem_available = stof(mem_value_str);
-        break;
-
-      case 3:
-        linestream >> aux >> mem_value_str;
-        buffers = stof(mem_value_str);
         break;
       }
     }
@@ -208,16 +196,12 @@ long LinuxParser::ActiveJiffies() {
   string irq_str;
   string softirq_str;
   string steal_str;
-  string guest_str;
-  string guest_nice_str;
   long user;
   long nice;
   long system;
   long irq;
   long softirq;
   long steal;
-  long guest;
-  long guest_nice;
   long active_jiffies;
 
   string line;
@@ -229,8 +213,7 @@ long LinuxParser::ActiveJiffies() {
     std::getline(stream, line);
     std::istringstream linestream(line);
     linestream >> aux >> user_str >> nice_str >> system_str >> idle_str >> 
-        iowait_str >> irq_str >> softirq_str >> steal_str >> guest_str >> 
-        guest_nice_str;
+        iowait_str >> irq_str >> softirq_str >> steal_str;
   }
 
   stream.close();
@@ -241,8 +224,6 @@ long LinuxParser::ActiveJiffies() {
   irq = std::stoi(irq_str);
   softirq = std::stoi(softirq_str);
   steal = std::stoi(steal_str);
-  guest = std::stoi(guest_str);
-  guest_nice = std::stoi(guest_nice_str);
 
   active_jiffies = user + nice + system + irq + softirq + steal;
   return active_jiffies; 
